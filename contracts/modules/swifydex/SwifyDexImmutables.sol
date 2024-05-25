@@ -1,30 +1,30 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.17;
 
-struct UniswapParameters {
+struct SwifyDexParameters {
     address v2Factory;
     address v3Factory;
     bytes32 pairInitCodeHash;
     bytes32 poolInitCodeHash;
 }
 
-contract UniswapImmutables {
+contract SwifyDexImmutables {
     /// @dev The address of UniswapV2Factory
     address internal immutable UNISWAP_V2_FACTORY;
 
     /// @dev The UniswapV2Pair initcodehash
     bytes32 internal immutable UNISWAP_V2_PAIR_INIT_CODE_HASH;
 
-    /// @dev The address of UniswapV3Factory
-    address internal immutable UNISWAP_V3_FACTORY;
+    /// @dev The address of SwifyDexFactory
+    address internal immutable SWIFYDEX_FACTORY;
 
-    /// @dev The UniswapV3Pool initcodehash
-    bytes32 internal immutable UNISWAP_V3_POOL_INIT_CODE_HASH;
+    /// @dev The SwifyDexPool initcodehash
+    bytes32 internal immutable SWIFYDEX_POOL_INIT_CODE_HASH;
 
-    constructor(UniswapParameters memory params) {
+    constructor(SwifyDexParameters memory params) {
         UNISWAP_V2_FACTORY = params.v2Factory;
         UNISWAP_V2_PAIR_INIT_CODE_HASH = params.pairInitCodeHash;
-        UNISWAP_V3_FACTORY = params.v3Factory;
-        UNISWAP_V3_POOL_INIT_CODE_HASH = params.poolInitCodeHash;
+        SWIFYDEX_FACTORY = params.v3Factory;
+        SWIFYDEX_POOL_INIT_CODE_HASH = params.poolInitCodeHash;
     }
 }

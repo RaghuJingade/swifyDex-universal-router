@@ -1,6 +1,6 @@
-# Universal Router
+# SwifyDex Universal Router
 
-Please read the [Contributions](https://github.com/Uniswap/universal-router#contributions) section before submitting a Pull Request.
+
 
 To see the commit of the smart contracts that was used in the latest deployment, see branch `deployed-commit`. To see the addresses of this latest deployment on each network, see folder `deploy-addresses`.
 
@@ -10,19 +10,19 @@ The Universal Router is a ERC20 and NFT swap router that allows users greater fl
 
 Our flexible command style allows us to provide users with:
 
-- Splitting and interleaving of Uniswap trades
+- Splitting and interleaving of Swifydex trades
 - Purchases of NFTs across 8 marketplaces
 - Partial fills of trades
 - Wrapping and Unwrapping of ETH
-- Time-bound, signature controlled token approvals using [Permit2](https://github.com/Uniswap/permit2)
+
 
 Transactions are encoded using a string of commands, allowing users to have maximum flexibility over what they want to perform. With all of these features available in a single transaction, the possibilities available to users are endless
 
 ## Contract Overview
 
-The Universal Router codebase consists of the `UniversalRouter` contract, and all of its dependencies. The purpose of the `UniversalRouter` is to allow users to unify Uniswap ERC20 swaps (on V2 and V3) with NFT purchases across 8 marketplaces, in a single transaction.
+The Universal Router codebase consists of the `UniversalRouter` contract, and all of its dependencies. The purpose of the `UniversalRouter` is to allow users to unify ERC20 swaps (on V2 and V3) with NFT purchases across 8 marketplaces, in a single transaction.
 
-`UniversalRouter` integrates with [Permit2](https://github.com/Uniswap/permit2), to enable users to have more safety, flexibility, and control over their ERC20 token approvals.
+
 
 ### UniversalRouter command encoding
 
@@ -142,7 +142,7 @@ The inputs for `V3_SWAP_EXACT_IN` is the encoding of 5 parameters:
 - `address` The recipient of the output of the trade
 - `uint256` The amount of input tokens for the trade
 - `uint256` The minimum amount of output tokens the user wants
-- `bytes` The UniswapV3 path you want to trade along
+- `bytes` The Swifydex path you want to trade along
 - `bool` A flag for whether the input funds should come from the caller (through Permit2) or whether the funds are already in the UniversalRouter
 
 Whereas in contrast `CRYPTOPUNKS` has just 3 parameters encoded:
@@ -165,7 +165,7 @@ Developer documentation to give a detailed explanation of the inputs for every c
 
 Clone the repository with:
 ```
-git clone --recurse-submodules https://github.com/Uniswap/universal-router.git
+git clone --recurse-submodules https://github.com/RaghuJingade/swifyDex-universal-router.git
 ```
 
 2. Create `.env` file with api key
@@ -202,16 +202,7 @@ yarn test:gas
 forge install
 forge build
 forge test
-```
-## Integrating
-
-1. Install the latest version of `@uniswap/universal-router` package.
-2. Add git submodules for contracts that aren't a node package. Make sure there's an empty `.gitmodules` file. Then run:
-    ```bash
-      git submodule add https://github.com/transmissions11/solmate
-      git submodule add https://github.com/Uniswap/permit2
-    ```
-3. You should now be able to import contracts from universal-router and compile.
+``
 
 ## Contributions
 Before you submit your PR, run all of the following and commit the changes:
@@ -226,41 +217,4 @@ yarn prettier:fix
 If you are only concerned with investigating gas diffs, you can run this command to only run gas tests
 ```bash
 yarn test:gas
-```
-
-### To Deploy
-
-Fill out parameters in `script/deployParameters/Deploy<network>.s.sol`
-
-```console
-forge script --broadcast \
---rpc-url <RPC-URL> \
---private-key <PRIVATE_KEY> \
---sig 'run()' \
-script/deployParameters/Deploy<network>.s.sol:Deploy<network>
-```
-
-### To Deploy and Verify
-
-```console
-forge script --broadcast \
---rpc-url <RPC-URL> \
---private-key <PRIVATE-KEY> \
---sig 'run()' \
-script/deployParameters/Deploy<network>.s.sol:Deploy<network> \
---etherscan-api-key <ETHERSCAN-API-KEY> \
---verify
-```
-
-#### To Deploy Permit2 Alongside UniversalRouter
-
-Fill out parameters in `scripts/deployParameters/<network>.json`
-
-```console
-forge script --broadcast \
---rpc-url <RPC-URL> \
---private-key <PRIVATE_KEY> \
---sig 'runAndDeployPermit2(string)' \
-script/deployParameters/DeployUniversalRouter.s.sol:DeployUniversalRouter \
-<pathToJSON>
 ```

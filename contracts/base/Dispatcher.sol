@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.17;
 
-import {V2SwapRouter} from '../modules/uniswap/v2/V2SwapRouter.sol';
-import {V3SwapRouter} from '../modules/uniswap/v3/V3SwapRouter.sol';
-import {BytesLib} from '../modules/uniswap/v3/BytesLib.sol';
+import {V2SwapRouter} from '../modules/swifydex/v2/V2SwapRouter.sol';
+import {V3SwapRouter} from '../modules/swifydex/v3/V3SwapRouter.sol';
+import {BytesLib} from '../modules/swifydex/v3/BytesLib.sol';
 import {Payments} from '../modules/Payments.sol';
 import {PaymentsImmutables} from '../modules/PaymentsImmutables.sol';
 import {NFTImmutables} from '../modules/NFTImmutables.sol';
@@ -86,8 +86,10 @@ abstract contract Dispatcher is NFTImmutables, Payments, V2SwapRouter, V3SwapRou
                         }
                         permit2TransferFrom(token, lockedBy, map(recipient), amount);
                     } else if (command == Commands.PERMIT2_PERMIT_BATCH) {
-                        (IAllowanceTransfer.PermitBatch memory permitBatch,) =
-                            abi.decode(inputs, (IAllowanceTransfer.PermitBatch, bytes));
+                        (IAllowanceTransfer.PermitBatch memory permitBatch, ) = abi.decode(
+                            inputs,
+                            (IAllowanceTransfer.PermitBatch, bytes)
+                        );
                         bytes calldata data = inputs.toBytes(1);
                         PERMIT2.permit(lockedBy, permitBatch, data);
                     } else if (command == Commands.SWEEP) {
@@ -188,8 +190,10 @@ abstract contract Dispatcher is NFTImmutables, Payments, V2SwapRouter, V3SwapRou
                         }
                         Payments.unwrapWETH9(map(recipient), amountMin);
                     } else if (command == Commands.PERMIT2_TRANSFER_FROM_BATCH) {
-                        (IAllowanceTransfer.AllowanceTransferDetails[] memory batchDetails) =
-                            abi.decode(inputs, (IAllowanceTransfer.AllowanceTransferDetails[]));
+                        IAllowanceTransfer.AllowanceTransferDetails[] memory batchDetails = abi.decode(
+                            inputs,
+                            (IAllowanceTransfer.AllowanceTransferDetails[])
+                        );
                         permit2TransferFrom(batchDetails, lockedBy);
                     } else if (command == Commands.BALANCE_CHECK_ERC20) {
                         // equivalent: abi.decode(inputs, (address, address, uint256))
@@ -341,8 +345,9 @@ abstract contract Dispatcher is NFTImmutables, Payments, V2SwapRouter, V3SwapRou
             } else if (command == Commands.EXECUTE_SUB_PLAN) {
                 bytes calldata _commands = inputs.toBytes(0);
                 bytes[] calldata _inputs = inputs.toBytesArray(1);
-                (success, output) =
-                    (address(this)).call(abi.encodeWithSelector(Dispatcher.execute.selector, _commands, _inputs));
+                (success, output) = (address(this)).call(
+                    abi.encodeWithSelector(Dispatcher.execute.selector, _commands, _inputs)
+                );
             } else if (command == Commands.APPROVE_ERC20) {
                 ERC20 token;
                 PaymentsImmutables.Spenders spender;
